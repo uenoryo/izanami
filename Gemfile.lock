@@ -6,12 +6,14 @@ GEM
       multi_json
     excon (0.62.0)
     multi_json (1.13.1)
+    rack (2.0.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   docker-api
+  rack
 
 BUNDLED WITH
    1.17.3
