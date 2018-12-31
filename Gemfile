@@ -8,4 +8,6 @@ gem "rack"
 
 gem "rack-reverse-proxy"
 
+gem "thin"
+
 gem "docker-api"
