@@ -1,17 +1,19 @@
 require 'docker'
 
-container = Docker::Container.create(
-  'Image'        => 'nimmis/apache-php7',
-  'name'         => 'ruby-test',
-  'Tty'          => true,
-  'AttachStdin'  => true,
-  'Volumes'      => {'additionalProperties' => {'/Users/ryo/dev/src/github.com/uenoryo/izanami' => '/var/www/html'}},
-  'ExposedPorts' => { '80/tcp' => {} },
-  'HostConfig'   => {
-    'PortBindings' => {
-      '80/tcp' => [{ 'HostPort' => '80' }]
-    }
-  }
-)
-
-container.start
+module Docker
+  def launch(image, name, host_port, container_port)
+    container = Docker::Container.create(
+      "Image"        => image,
+      "name"         => name,
+      "Tty"          => true,
+      "AttachStdin"  => true,
+      "ExposedPorts" => { "#{container_port}/tcp" => {} },
+      "HostConfig"   => {
+        "PortBindings" => {
+          "#{container_port}/tcp" => [{ "HostPort" => host_port.to_s }]
+        }
+      }
+      # "Volumes" => {"additionalProperties" => {"/" => "/"}},
+    ).start
+  end
+end
