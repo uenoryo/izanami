@@ -10,17 +10,17 @@ class IzanamiServer
 
   def respond
     case @request.subdomain
-    when 'dobai'
-      target = 'http://localhost:8001'
-    when 'dev'
-      target = 'http://localhost:8002'
-    when 'izanami'
+    when "dobai"
+      target = "http://localhost:8001"
+    when "dev"
+      target = "http://localhost:8002"
+    when "izanami"
       return self.respond_to_admin_request
     else
       return self.respond_not_found
     end
 
-    app = Rack::ReverseProxy.new {reverse_proxy '/', target}
+    app = Rack::ReverseProxy.new {reverse_proxy "/", target}
     app.call(@request.data)
   end
 
