@@ -1,8 +1,10 @@
-require './request'
+require 'json'
 require 'rack/reverse_proxy'
 
+require './request'
+
 class IzanamiServer
-  attr_accessor :request
+  attr_reader :request
 
   def receive(request)
     @request = Request.marshal(request)
@@ -25,7 +27,14 @@ class IzanamiServer
   end
 
   def respond_to_admin_request
-    nil
+    case @request.path
+    when "/"
+      return [200, { 'Content-Type' => 'application/json' }, [ { :x => 1 }.to_json ]]
+    when "/list"
+      return [200, { 'Content-Type' => 'application/json' }, [ { :x => 2 }.to_json ]]
+    else
+      return self.respond_not_found
+    end
   end
 
   def respond_not_found
