@@ -1,12 +1,12 @@
-require './izanami'
+require './izanami_server'
 require 'rack'
-require 'rack/reverse_proxy'
 
-class IzanamiServer
-  def call(env)
-    izanami = Izanami.new env
-    return izanami.respond
+class Server
+  def call(request)
+    server = IzanamiServer.new
+    server.receive request
+    return server.respond
   end
 end
 
-run IzanamiServer.new
+run Server.new
