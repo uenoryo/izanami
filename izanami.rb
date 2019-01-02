@@ -12,6 +12,8 @@ class Izanami
   CONTAINER_NAME_PREFIX = 'izanami_'
   HTTP_PORT = 80
   BEGINING_PORT = 8500
+  LOCAL_LOOPBACK_ADDRESS = '127.0.0.1'
+  URL_SCHEME_HTTP = 'http://'
 
   def launch(subdomain:, image:, branch:)
     info = nil
@@ -37,5 +39,15 @@ class Izanami
     end
 
     Response.success_launch(info)
+  end
+
+  # TODO: https への対応
+  def proxy_host(subdomain)
+    record = find_by_subdomain(subdomain)
+    return if record.nil?
+
+    p record
+
+    "#{URL_SCHEME_HTTP}#{LOCAL_LOOPBACK_ADDRESS}:#{record[:container_port]}"
   end
 end

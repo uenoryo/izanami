@@ -85,4 +85,11 @@ module Storage
 
     raise "port #{begining_port} ~ #{max_port} is perfectly used"
   end
+
+  def find_by_subdomain(subdomain)
+    fetch_all.each do |record|
+      return record if record[:subdomain] == subdomain
+    end
+    nil
+  end
 end

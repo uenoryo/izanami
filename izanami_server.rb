@@ -10,28 +10,33 @@ require './izanami'
 class IzanamiServer
   attr_reader :request
 
+  ADMIN_SUBDOMAIN = 'izanami'
+
   def respond(request)
     maybe 'error marshal request' do
       @request = Request.marshal(request)
     end
 
-    case @request.subdomain
-    when 'dobai'
-      target = 'http://localhost:8001'
-    when 'dev'
-      target = 'http://localhost:8002'
-    when 'izanami'
+    if @request.subdomain == ADMIN_SUBDOMAIN
       return respond_to_admin_request
-    else
-      return Response.not_found
     end
+    respond_to_proxy_request
 
-    app = Rack::ReverseProxy.new { reverse_proxy '/', target }
-    app.call(@request.data)
   rescue => e
     message = errors_new(e)
     STDERR.puts message
     Response.server_error(message)
+  end
+
+  def respond_to_proxy_request
+    proxy_host = nil
+    maybe "error find proxy host #{@request.subdomain}" do
+      proxy_host = Izanami.new.proxy_host(@request.subdomain)
+    end
+    return Response.not_found if proxy_host.nil?
+
+    app = Rack::ReverseProxy.new { reverse_proxy '/', proxy_host }
+    app.call(@request.data)
   end
 
   def respond_to_admin_request
