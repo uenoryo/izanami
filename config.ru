@@ -1,11 +1,12 @@
 require './izanami_server'
 require 'rack'
 
+# Server ...
 class Server
   def call(request)
     server = IzanamiServer.new
     server.receive request
-    return server.respond
+    server.respond
   end
 end
 
