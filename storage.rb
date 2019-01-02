@@ -21,22 +21,46 @@ module Storage
   end
 
   def save(record)
+    all_records = []
+    maybe 'error get all record' do
+      all = fetch_all
+      all_records = all if all
+    end
+
     file = nil
     maybe "error file open #{FILENAME}" do
       file = File.open(FILENAME, 'w')
     end
 
     maybe 'error dump yaml' do
-      YAML.dump(all.push(record), file)
+      all_records.unshift(record)
+      all_records = uniq_by_subdomain(all_records)
+      YAML.dump(all_records, file)
     end
+
+    file.close
   end
 
-  def all
-    list = nil
+  def fetch_all
+    list = []
+    return list unless File.exist?(FILENAME)
+
     maybe "failed load file #{FILENAME}" do
       list = YAML.load_file(FILENAME)
     end
 
     list
+  end
+
+  def uniq_by_subdomain(records)
+    subdomains = []
+    records.reject do |record|
+      if subdomains.include?(record[:subdomain])
+        true
+      else
+        subdomains.push(record[:subdomain])
+        false
+      end
+    end
   end
 end
