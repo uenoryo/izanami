@@ -23,3 +23,18 @@ RescueStandardError:
 
 MutableConstant:
   Enabled: false
+
+AbcSize:
+  Enabled: false
+
+CyclomaticComplexity:
+  Enabled: false
+
+IfUnlessModifier:
+  Enabled: false
+
+ParameterLists:
+  Enabled: false
+
+GuardClause:
+  Enabled: false

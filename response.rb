@@ -1,4 +1,27 @@
+# Response (｀・ω・)▄︻┻┳═一
 class Response
+  def self.success_launch(data)
+    success(
+      'コンテナの起動に成功しました',
+      'launch success',
+      data
+    )
+  end
+
+  def self.success(message, message_debug, data)
+    [
+      200,
+      { 'Content-Type' => 'application/json' },
+      [
+        error: false,
+        code: 200,
+        message: message,
+        message_debug: message_debug,
+        data: data
+      ]
+    ]
+  end
+
   def self.server_error(message)
     [
       500,
@@ -6,8 +29,9 @@ class Response
       [
         error: true,
         code: 500,
-        message: "サーバーエラーが発生しました",
-        message_debug: message
+        message: 'サーバーエラーが発生しました',
+        message_debug: message,
+        data: []
       ]
     ]
   end
@@ -20,7 +44,8 @@ class Response
         error: true,
         code: 400,
         message: message,
-        message_debug: message
+        message_debug: message,
+        data: []
       ]
     ]
   end
@@ -32,8 +57,9 @@ class Response
       [
         error: true,
         code: 404,
-        message: "ページが見つかりません",
-        message_debug: "not found"
+        message: 'ページが見つかりません',
+        message_debug: 'not found',
+        data: []
       ]
     ]
   end

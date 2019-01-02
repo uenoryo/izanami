@@ -2,6 +2,7 @@ require 'date'
 
 require './docker'
 require './storage'
+require './response'
 
 # Izanami (｀・ω・)▄︻┻┳═一
 class Izanami
@@ -34,5 +35,7 @@ class Izanami
     maybe "error save record #{info}" do
       save(info)
     end
+
+    Response.success_launch(info)
   end
 end

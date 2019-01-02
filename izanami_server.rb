@@ -11,7 +11,7 @@ class IzanamiServer
   attr_reader :request
 
   def respond(request)
-    maybe "error marshal request" do
+    maybe 'error marshal request' do
       @request = Request.marshal(request)
     end
 
@@ -51,15 +51,9 @@ class IzanamiServer
         return Response.bad_request(err) unless err.nil?
 
         input = @request.input
-
         maybe "izanami launch failed, input: #{input}" do
-          Izanami.new.launch(
-            subdomain: input['subdomain'],
-            image: input['image'],
-            branch: input['branch']
-          )
+          return Izanami.new.launch(subdomain: input['subdomain'], image: input['image'], branch: input['branch'])
         end
-        return [200, { 'Content-Type' => 'application/json' }, [{ x: 2 }.to_json]]
       end
     end
 
