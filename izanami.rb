@@ -46,8 +46,6 @@ class Izanami
     record = find_by_subdomain(subdomain)
     return if record.nil?
 
-    p record
-
     "#{URL_SCHEME_HTTP}#{LOCAL_LOOPBACK_ADDRESS}:#{record[:container_port]}"
   end
 end
