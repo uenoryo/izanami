@@ -4,7 +4,7 @@ require 'rack/reverse_proxy'
 require './request'
 require './izanami'
 
-# IzanamiServer ...
+# IzanamiServer (｀・ω・)▄︻┻┳═一
 class IzanamiServer
   attr_reader :request
 

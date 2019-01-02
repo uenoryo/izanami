@@ -1,7 +1,7 @@
 require './docker'
 require './storage'
 
-# Izanami ...
+# Izanami (｀・ω・)▄︻┻┳═一
 class Izanami
   include Docker
   include Storage

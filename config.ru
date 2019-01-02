@@ -1,7 +1,7 @@
 require './izanami_server'
 require 'rack'
 
-# Server ...
+# Server (｀・ω・)▄︻┻┳═一
 class Server
   def call(request)
     server = IzanamiServer.new

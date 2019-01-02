@@ -1,6 +1,6 @@
 require 'docker'
 
-# Docker ...
+# Docker (｀・ω・)▄︻┻┳═一
 module Docker
   def launch(image, name, host_port, container_port)
     Docker::Container.create(

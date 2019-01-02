@@ -1,6 +1,6 @@
 require 'json'
 
-# Request ...
+# Request (｀・ω・)▄︻┻┳═一
 class Request
   attr_reader :data
   attr_reader :subdomain
