@@ -10,7 +10,9 @@ class IzanamiServer
   attr_reader :request
 
   def receive(request)
-    @request = Request.marshal(request)
+    maybe "error request marshal #{request}" do
+      @request = Request.marshal(request)
+    end
   end
 
   def respond
@@ -46,9 +48,17 @@ class IzanamiServer
     if @request.post?
       case @request.path
       when '/launch'
-        # Izanami.new.launch('nimmis/apache-php7', 'onigiri', 80, 80)
-        maybe 'izanami launch failed, subdomain: dobai, image: myreco/izanami' do
-          Izanami.new.launch('dobai', 'myreco/izanami', 'master')
+        err = @request.validate_for_launch
+        return respond_bad_request(err) unless err.nil?
+
+        input = @request.input
+
+        maybe "izanami launch failed, input: #{input}" do
+          Izanami.new.launch(
+            subdomain: input['subdomain'],
+            image: input['image'],
+            branch: input['branch']
+          )
         end
         return [200, { 'Content-Type' => 'application/json' }, [{ x: 2 }.to_json]]
       end
@@ -59,6 +69,10 @@ class IzanamiServer
 
   def respond_server_error(message)
     Rack::Response.new("500 internal server error: #{message}", 500)
+  end
+
+  def respond_bad_request(message)
+    Rack::Response.new("400 bad request: #{message}", 400)
   end
 
   def respond_not_found

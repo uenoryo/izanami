@@ -12,7 +12,7 @@ class Izanami
   HTTP_PORT = 80
   BEGINING_PORT = 8500
 
-  def launch(subdomain, image, branch)
+  def launch(subdomain:, image:, branch:)
     info = nil
     maybe 'error create record' do
       container_name = CONTAINER_NAME_PREFIX + subdomain
