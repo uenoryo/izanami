@@ -48,7 +48,7 @@ class IzanamiServer
       when '/launch'
         # Izanami.new.launch('nimmis/apache-php7', 'onigiri', 80, 80)
         maybe 'izanami launch failed, subdomain: dobai, image: myreco/izanami' do
-          Izanami.new.launch('dobai', 'myreco/izanami')
+          Izanami.new.launch('dobai', 'myreco/izanami', 'master')
         end
         return [200, { 'Content-Type' => 'application/json' }, [{ x: 2 }.to_json]]
       end
