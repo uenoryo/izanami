@@ -1,3 +1,5 @@
+require 'date'
+
 require './docker'
 require './storage'
 
@@ -10,10 +12,11 @@ class Izanami
   BEGINING_PORT = 8500
 
   def launch(subdomain, image)
-    record = nil
+    info = nil
     maybe 'error create record' do
       container_name = CONTAINER_NAME_PREFIX + subdomain
-      record = Record.create(subdomain, image, container_name, next_port(BEGINING_PORT), '1995-06-11 10:00:22')
+      now = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
+      info = Record.create(subdomain, image, container_name, next_port(BEGINING_PORT), now)
     end
 
     maybe "error save record #{record}" do
