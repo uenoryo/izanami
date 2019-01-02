@@ -71,4 +71,18 @@ module Storage
       end
     end
   end
+
+  def next_port(begining_port)
+    limit = 500
+    max_port = begining_port + limit
+    used_ports = fetch_all.map do |record|
+      record[:container_port]
+    end
+
+    (begining_port..max_port).each do |port|
+      return port unless used_ports.include?(port)
+    end
+
+    raise "port #{begining_port} ~ #{max_port} is perfectly used"
+  end
 end
