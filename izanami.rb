@@ -23,8 +23,9 @@ class Izanami
       info = Record.create(subdomain, image, container_name, next_port(BEGINING_PORT), now)
     end
 
+    container = nil
     maybe "error launch container info #{info}" do
-      launch_container(
+      container = launch_container(
         image: info[:image],
         name: info[:name],
         host_port: info[:container_port],
@@ -33,6 +34,7 @@ class Izanami
         branch: branch
       )
     end
+    info[:id] = container.id
 
     maybe "error save record #{info}" do
       save(info)

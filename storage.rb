@@ -11,6 +11,7 @@ module Storage
       raise "invalid date format #{updated_at}" unless Date.parse(updated_at)
 
       {
+        id: '',
         subdomain: subdomain,
         image: image,
         name: name,
@@ -21,6 +22,8 @@ module Storage
   end
 
   def save(record)
+    raise "container id is empty" if record[:id] == ''
+
     all_records = []
     maybe 'error get all record' do
       all = fetch_all
