@@ -5,8 +5,7 @@ require 'rack'
 class Server
   def call(request)
     server = IzanamiServer.new
-    server.receive request
-    server.respond
+    server.respond(request)
   end
 end
 

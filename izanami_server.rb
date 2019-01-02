@@ -3,19 +3,18 @@ require 'rack/reverse_proxy'
 
 require './errors'
 require './request'
+require './response'
 require './izanami'
 
 # IzanamiServer (｀・ω・)▄︻┻┳═一
 class IzanamiServer
   attr_reader :request
 
-  def receive(request)
-    maybe "error request marshal #{request}" do
+  def respond(request)
+    maybe "error marshal request" do
       @request = Request.marshal(request)
     end
-  end
 
-  def respond
     case @request.subdomain
     when 'dobai'
       target = 'http://localhost:8001'
@@ -24,15 +23,15 @@ class IzanamiServer
     when 'izanami'
       return respond_to_admin_request
     else
-      return respond_not_found
+      return Response.not_found
     end
 
     app = Rack::ReverseProxy.new { reverse_proxy '/', target }
     app.call(@request.data)
   rescue => e
-    err = errors_new(e)
-    STDERR.puts err
-    respond_server_error(err)
+    message = errors_new(e)
+    STDERR.puts message
+    Response.server_error(message)
   end
 
   def respond_to_admin_request
@@ -49,7 +48,7 @@ class IzanamiServer
       case @request.path
       when '/launch'
         err = @request.validate_for_launch
-        return respond_bad_request(err) unless err.nil?
+        return Response.bad_request(err) unless err.nil?
 
         input = @request.input
 
@@ -64,18 +63,6 @@ class IzanamiServer
       end
     end
 
-    respond_not_found
-  end
-
-  def respond_server_error(message)
-    Rack::Response.new("500 internal server error: #{message}", 500)
-  end
-
-  def respond_bad_request(message)
-    Rack::Response.new("400 bad request: #{message}", 400)
-  end
-
-  def respond_not_found
-    Rack::Response.new('404 not found', 404)
+    Response.not_found
   end
 end

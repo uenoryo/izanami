@@ -37,7 +37,10 @@ class Request
   end
 
   def set_input
+    @input = []
     json = @data['rack.input']&.read
+    return if json.nil? || json.empty?
+
     @input = JSON.parse json
   end
 
