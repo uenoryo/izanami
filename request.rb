@@ -41,6 +41,20 @@ class Request
     @input = JSON.parse json
   end
 
+  def validate_for_launch
+    if @input['subdomain'].nil? || @input['subdomain'].empty?
+      return 'subdomain is required for launch'
+    end
+
+    if @input['image'].nil? || @input['image'].empty?
+      return 'image is required for launch'
+    end
+
+    if @input['branch'].nil? || @input['branch'].empty?
+      return 'branch is required for launch'
+    end
+  end
+
   def get?
     @method == 'GET'
   end
