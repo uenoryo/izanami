@@ -1,6 +1,7 @@
 require 'json'
 require 'rack/reverse_proxy'
 
+require './errors'
 require './request'
 require './izanami'
 
@@ -19,13 +20,18 @@ class IzanamiServer
     when 'dev'
       target = 'http://localhost:8002'
     when 'izanami'
-      return respond_to_admin_request
+      return respond_to_admin_request rescue raise "izanami"
     else
       return respond_not_found
     end
 
     app = Rack::ReverseProxy.new { reverse_proxy '/', target }
     app.call(@request.data)
+
+  rescue => e
+    err = errors_new(e)
+    STDERR.puts err
+    respond_server_error(err)
   end
 
   def respond_to_admin_request
@@ -42,11 +48,18 @@ class IzanamiServer
       case @request.path
       when '/launch'
         # Izanami.new.launch('nimmis/apache-php7', 'onigiri', 80, 80)
+        maybe "izanami launch failed, subdomain: dobai, image: myreco/izanami" do
+          Izanami.new.launch("dobai", "myreco/izanami")
+        end
         return [200, { 'Content-Type' => 'application/json' }, [{ x: 2 }.to_json]]
       end
     end
 
     respond_not_found
+  end
+
+  def respond_server_error(message)
+    Rack::Response.new("500 internal server error: #{message}", 500)
   end
 
   def respond_not_found
