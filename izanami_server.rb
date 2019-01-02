@@ -20,14 +20,13 @@ class IzanamiServer
     when 'dev'
       target = 'http://localhost:8002'
     when 'izanami'
-      return respond_to_admin_request rescue raise "izanami"
+      return respond_to_admin_request
     else
       return respond_not_found
     end
 
     app = Rack::ReverseProxy.new { reverse_proxy '/', target }
     app.call(@request.data)
-
   rescue => e
     err = errors_new(e)
     STDERR.puts err
@@ -48,8 +47,8 @@ class IzanamiServer
       case @request.path
       when '/launch'
         # Izanami.new.launch('nimmis/apache-php7', 'onigiri', 80, 80)
-        maybe "izanami launch failed, subdomain: dobai, image: myreco/izanami" do
-          Izanami.new.launch("dobai", "myreco/izanami")
+        maybe 'izanami launch failed, subdomain: dobai, image: myreco/izanami' do
+          Izanami.new.launch('dobai', 'myreco/izanami')
         end
         return [200, { 'Content-Type' => 'application/json' }, [{ x: 2 }.to_json]]
       end

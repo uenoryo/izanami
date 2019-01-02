@@ -1,5 +1,5 @@
-def maybe(err_message, &block)
-  block.call rescue raise err_message
+def maybe(err_message)
+  yield rescue raise err_message
 end
 
 def errors_new(err)

@@ -8,11 +8,11 @@ class Izanami
 
   def launch(subdomain, image)
     record = nil
-    maybe "error create record" do
+    maybe 'error create record' do
       record = Record.create(subdomain, image, 'せんべい', 9922, '1995-06-11 10:00:22')
     end
 
-    maybe "error save record" do
+    maybe 'error save record' do
       save(record)
     end
   end
