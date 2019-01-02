@@ -36,12 +36,15 @@ module Storage
       all_records.unshift(record)
       all_records = uniq_by_subdomain(all_records)
       YAML.dump(all_records, file)
+      reset_cache
     end
 
     file.close
   end
 
   def fetch_all
+    return @list unless @list.nil?
+
     list = []
     return list unless File.exist?(FILENAME)
 
@@ -49,7 +52,12 @@ module Storage
       list = YAML.load_file(FILENAME)
     end
 
+    @list = list
     list
+  end
+
+  def reset_cache
+    @list = nil
   end
 
   def uniq_by_subdomain(records)
