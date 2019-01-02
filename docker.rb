@@ -22,4 +22,8 @@ module Docker
       # 'Volumes' => {'additionalProperties' => {'/' => '/'}},
     ).start
   end
+
+  def destroy_container(id)
+    Docker::Container.get(id).remove(:force => true)
+  end
 end

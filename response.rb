@@ -8,6 +8,14 @@ class Response
     )
   end
 
+  def self.success_destroy(data)
+    success(
+      'コンテナの削除に成功しました',
+      'destroy success',
+      data
+    )
+  end
+
   def self.success(message, message_debug, data)
     [
       200,

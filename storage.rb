@@ -45,6 +45,33 @@ module Storage
     file.close
   end
 
+  def delete(record)
+    raise "container id is empty" if record[:subdomain] == ''
+
+    all_records = []
+    maybe 'error get all record' do
+      all = fetch_all
+      all_records = all if all
+    end
+
+    file = nil
+    maybe "error file open #{FILENAME}" do
+      file = File.open(FILENAME, 'w')
+    end
+
+    all_records.reject! do |r|
+      r[:subdomain] == record[:subdomain]
+    end
+
+    maybe 'error dump yaml' do
+      all_records = uniq_by_subdomain(all_records)
+      YAML.dump(all_records, file)
+      reset_cache
+    end
+
+    file.close
+  end
+
   def fetch_all
     return @list unless @list.nil?
 
@@ -94,5 +121,11 @@ module Storage
       return record if record[:subdomain] == subdomain
     end
     nil
+  end
+
+  def find_must_by_subdomain(subdomain)
+    record = find_by_subdomain(subdomain)
+    raise "record linked subdomain #{subdomain} is not found" if record.nil?
+    record
   end
 end

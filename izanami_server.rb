@@ -59,6 +59,14 @@ class IzanamiServer
         maybe "izanami launch failed, input: #{input}" do
           return Izanami.new.launch(subdomain: input['subdomain'], image: input['image'], branch: input['branch'])
         end
+      when '/destroy'
+        err = @request.validate_for_destroy
+        return Response.bad_request(err) unless err.nil?
+
+        input = @request.input
+        maybe "izanami destroy failed, input: #{input}" do
+          return Izanami.new.destroy(subdomain: input['subdomain'])
+        end
       end
     end
 

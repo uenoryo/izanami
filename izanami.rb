@@ -43,6 +43,23 @@ class Izanami
     Response.success_launch(info)
   end
 
+  def destroy(subdomain:)
+    record = nil
+    maybe 'error find record' do
+      record = find_must_by_subdomain(subdomain)
+    end
+
+    maybe "error destroy container id #{record[:id]}" do
+      destroy_container(record[:id])
+    end
+
+    maybe "error delete record #{record}" do
+      delete(record)
+    end
+
+    Response.success_destroy(record)
+  end
+
   # TODO: https への対応
   def proxy_host(subdomain)
     record = find_by_subdomain(subdomain)

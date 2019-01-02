@@ -58,6 +58,12 @@ class Request
     end
   end
 
+  def validate_for_destroy
+    if @input['subdomain'].nil? || @input['subdomain'].empty?
+      return 'subdomain is required for destroy'
+    end
+  end
+
   def get?
     @method == 'GET'
   end
