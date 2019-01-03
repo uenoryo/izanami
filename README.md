@@ -18,6 +18,8 @@ Dockerコンテナを起動し、指定されたサブドメインを用いて�
 環境のセットアップとサーバの起動ができるように Dockerfile を記述します
 例)
 
+**Dockerfile**
+
 ```text:Dockerfile
 FROM laradock/workspace:2.2-7.2
 
@@ -34,6 +36,8 @@ CMD . ./run.sh
 
 コンテナには環境変数 `$GIT_BRANCH` にブランチ名が渡されるので  
 `docker run` した時にチェックアウトするようにしておきます
+
+**run.sh**
 
 ```bash:run.sh
 #!/bin/bash
