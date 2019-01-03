@@ -60,7 +60,7 @@ class Request
 
   def validate_for_destroy
     if @input['subdomain'].nil? || @input['subdomain'].empty?
-      return 'subdomain is required for destroy'
+      'subdomain is required for destroy'
     end
   end
 

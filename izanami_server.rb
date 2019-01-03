@@ -20,8 +20,8 @@ class IzanamiServer
     if @request.subdomain == ADMIN_SUBDOMAIN
       return respond_to_admin_request
     end
-    respond_to_proxy_request
 
+    respond_to_proxy_request
   rescue => e
     message = errors_new(e)
     STDERR.puts message

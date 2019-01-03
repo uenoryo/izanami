@@ -24,6 +24,6 @@ module Docker
   end
 
   def destroy_container(id)
-    Docker::Container.get(id).remove(:force => true)
+    Docker::Container.get(id).remove(force: true)
   end
 end

@@ -22,7 +22,7 @@ module Storage
   end
 
   def save(record)
-    raise "container id is empty" if record[:id] == ''
+    raise 'container id is empty' if record[:id] == ''
 
     all_records = []
     maybe 'error get all record' do
@@ -46,7 +46,7 @@ module Storage
   end
 
   def delete(record)
-    raise "container id is empty" if record[:subdomain] == ''
+    raise 'container id is empty' if record[:subdomain] == ''
 
     all_records = []
     maybe 'error get all record' do
@@ -126,6 +126,7 @@ module Storage
   def find_must_by_subdomain(subdomain)
     record = find_by_subdomain(subdomain)
     raise "record linked subdomain #{subdomain} is not found" if record.nil?
+
     record
   end
 end
