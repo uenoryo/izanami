@@ -1,5 +1,13 @@
 # Response (｀・ω・)▄︻┻┳═一
 class Response
+  def self.view(erb)
+    [
+      200,
+      { 'Content-Type' => 'text/html; charset=utf8' },
+      erb
+    ]
+  end
+
   def self.success_launch(data)
     success(
       'コンテナの起動に成功しました',
@@ -19,7 +27,7 @@ class Response
   def self.success(message, message_debug, data)
     [
       200,
-      { 'Content-Type' => 'application/json' },
+      { 'Content-Type' => 'application/json; charset=utf8' },
       [
         error: false,
         code: 200,
@@ -33,7 +41,7 @@ class Response
   def self.server_error(message)
     [
       500,
-      { 'Content-Type' => 'application/json' },
+      { 'Content-Type' => 'application/json; charset=utf8' },
       [
         error: true,
         code: 500,
@@ -47,7 +55,7 @@ class Response
   def self.bad_request(message)
     [
       400,
-      { 'Content-Type' => 'application/json' },
+      { 'Content-Type' => 'application/json; charset=utf8' },
       [
         error: true,
         code: 400,
@@ -61,7 +69,7 @@ class Response
   def self.not_found
     [
       404,
-      { 'Content-Type' => 'application/json' },
+      { 'Content-Type' => 'application/json; charset=utf8' },
       [
         error: true,
         code: 404,

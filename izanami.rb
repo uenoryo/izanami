@@ -1,3 +1,4 @@
+require 'erb'
 require 'date'
 
 require './docker'
@@ -66,5 +67,11 @@ class Izanami
     return if record.nil?
 
     "#{URL_SCHEME_HTTP}#{LOCAL_LOOPBACK_ADDRESS}:#{record[:container_port]}"
+  end
+
+  def home_view()
+    str = 'おにぎり'
+    erb = ERB.new(File.read('./templates/home.html.erb'))
+    Response.view(erb.result(binding))
   end
 end

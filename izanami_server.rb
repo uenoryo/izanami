@@ -43,7 +43,7 @@ class IzanamiServer
     if @request.get?
       case @request.path
       when '/'
-        return [200, { 'Content-Type' => 'application/json' }, [{ x: 1 }.to_json]]
+        return Izanami.new.home_view()
       when '/list'
         return [200, { 'Content-Type' => 'application/json' }, [{ x: 2 }.to_json]]
       end
