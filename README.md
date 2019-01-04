@@ -1,4 +1,4 @@
-![izanami](https://user-images.githubusercontent.com/15713787/50641110-46e85900-0faa-11e9-8ce5-af1b3cfff265.png)
+![izanami](https://user-images.githubusercontent.com/15713787/50675442-96259c80-1031-11e9-8c00-05510df31407.png)
 
 イザナミさんは、「Dockerイメージ」「ブランチ」「サブドメイン名」の3つをHTTPリクエストで受け付けて、  
 Dockerコンテナを起動し、指定されたサブドメインを用いてその環境へのリバースプロキシを提供します。
