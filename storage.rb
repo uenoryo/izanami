@@ -7,7 +7,7 @@ module Storage
 
   # Record (｀・ω・)▄︻┻┳═一
   class Record
-    def self.create(subdomain, image, name, container_port, updated_at)
+    def self.create(subdomain:, image:, name:, branch:, container_port:, updated_at:)
       raise "invalid date format #{updated_at}" unless Date.parse(updated_at)
 
       {
@@ -15,6 +15,7 @@ module Storage
         subdomain: subdomain,
         image: image,
         name: name,
+        branch: branch,
         container_port: container_port,
         updated_at: updated_at
       }
