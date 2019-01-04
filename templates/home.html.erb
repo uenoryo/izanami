@@ -4,14 +4,52 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Izanami 管理画面</title>
-  <link rel="stylesheet" href="">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script>
+  $(document).ready(function(){
+    $('ul.tabs').tabs();
+  })
+  </script>
 </head>
+<style>
+.brand-logo {
+  margin-left: 16px;
+}
+.main {
+  margin-top: 16px;
+  min-height: 560px;
+}
+.empty-line {
+  height: 4px;
+}
+.indicator {
+  background-color: #eeff41!important;
+}
+.tab .active {
+  color: #795548!important;
+}
+</style>
 <body>
-  <h1>Izanami</h1>
-  <div id="app">
+    <div class="empty-line lime accent-2"></div>
+  <nav>
+    <div class="nav-wrapper white accent-2">
+      <a href="#" class="brand-logo  brown-text">Izanami</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <!-- <li><a href="collapsible.html">JavaScript</a></li> -->
+      </ul>
+    </div>
+  </nav>
+  <div id="app" class="container main">
     <app-main></app-main>
   </div>
+  <footer class="page-footer lime accent-2">
+      <div class="container right-align brown-text">
+      Github Repository <a href="https://github.com/uenoryo/izanami" target="_blank">uenoryo/izanami</a>
+      </div>
+  </footer>
   <%= script %>
 </body>
 </html>

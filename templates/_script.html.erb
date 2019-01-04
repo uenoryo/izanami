@@ -1,10 +1,56 @@
-<script type="text/x-template" id="app-main">
-  <div>izanami</div>
-</script>
+<template type="text/x-template" id="app-main">
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs">
+        <li class="tab col s6"><a href="#tab1" class="grey-text">List</a></li>
+        <li class="tab col s6"><a href="#tab2" class="grey-text">Create</a></li>
+      </ul>
+    </div class="lime">
+    <div id="tab1" class="col s12">
+      <table>
+        <thead>
+          <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Image</th>
+              <th>Updated At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="c of Containers">
+            <td>{{ c.id | omitContainerId }}</td>
+            <td>{{ c.subdomain }}</td>
+            <td>{{ c.image }}</td>
+            <td>{{ c.updated_at }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="tab2" class="col s6">Test 2</div>
+  </div>
+</template>
 
 <script>
   var c = Vue.component('main', {
-    template: '#app-main'
+    template: '#app-main',
+    data () {
+      return {
+        Containers: [1,2],
+      }
+    },
+    beforeMount() {
+      console.log(this.Containers)
+      fetch('/list').then((response) => {
+          response.json().then((json) => {
+            this.Containers = json[0].data
+          })
+        })
+    },
+    filters: {
+      omitContainerId: (id) => {
+        return id.substr(0, 12)
+      }
+    }
   })
 
   var vm = new Vue({
