@@ -20,7 +20,10 @@
         </thead>
         <tbody>
           <tr v-for="c of Containers">
-            <td>{{ c.id | omitContainerId }}</td>
+            <td>
+              {{ c.id | omitContainerId }}
+              <span v-if="isNew(c.updated_at)" class="new badge lime accent-2 brown-text" />
+            </td>
             <td>{{ c.subdomain }}</td>
             <td>{{ c.branch }}</td>
             <td>{{ c.image }}</td>
@@ -201,7 +204,14 @@
             callable(res)
           })
         })
-      }
+      },
+      isNew(updated_at) {
+        let now = new Date
+        let updated = new Date(updated_at)
+
+        // 3分以内は新しい
+        return (now.getTime() - updated.getTime()) / 1000 < 180
+      },
     },
   })
 
