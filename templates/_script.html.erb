@@ -26,14 +26,16 @@
             <td>{{ c.image }}</td>
             <td>{{ c.updated_at }}</td>
             <td>
-              <a class="waves-effect btn modal-trigger" :href='["#del-" + c.subdomain]'><i class="material-icons">delete</i></a>
+              <a class="waves-effect btn modal-trigger" :href='["#del-" + c.subdomain]'>
+                <i class="material-icons">delete</i>
+              </a>
               <div :id='["del-" + c.subdomain]' class="modal">
                 <div class="modal-content">
                   <p>Are you sure you want to delete? (subdomain: <b>{{ c.subdomain }}</b>)</p>
                 </div>
                 <div class="modal-footer">
                   <a class="modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
-                  <a class="modal-action modal-close waves-effect waves-green btn">DELETE</a>
+                  <a @click="postDestroy" class="modal-action modal-close waves-effect waves-green btn">DELETE</a>
                 </div>
               </div>
             </td>
@@ -50,29 +52,72 @@
               <form class="">
                 <div class="row">
                   <div class="input-field col s12">
-                    <input placeholder="Input sub domain name." id="subdomain" type="text" class="validate">
+                    <input placeholder="Input sub domain name." id="subdomain" type="text" class="validate" required>
                     <label for="subdomain">Sub Domain</label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="input-field col s12">
-                    <input placeholder="Input docker image name." id="image" type="text" class="validate">
+                    <input placeholder="Input docker image name." id="image" type="text" class="validate" required>
                     <label for="image">Docker Image</label>
                   </div>
                 </div>
                 <div class="row">
                   <div class="input-field col s12">
-                    <input placeholder="Input git branch name" id="branch" type="text" class="validate">
+                    <input placeholder="Input git branch name." id="branch" type="text" class="validate" required>
                     <label for="branch">Git Branch</label>
                   </div>
                 </div>
               </form>
             </div>
             <div class="card-action right-align">
-              <button class="btn waves-effect lime accent-2 brown-text" href="">Create</button>
+              <button @click="postLaunch" class="btn waves-effect lime accent-2 brown-text">Create</button>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div id="loading" class="modal">
+      <div class="modal-content left-align">
+        <p>{{ LoadingMessage }}</p>
+        <div class="center-align">
+          <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div>
+            </div>
+            <div class="spinner-layer spinner-red">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div>
+            </div>
+            <div class="spinner-layer spinner-yellow">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div>
+            </div>
+            <div class="spinner-layer spinner-green">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">CLOSE</a>
+      </div>
+    </div>
+    <div id="error-modal" class="modal">
+      <div class="modal-content left-align">
+        <b>エラーが発生しました(´；ω；｀)</b>
+        <p>ステータス: {{ ErrorCode }}</p>
+        <p>メッセージ:</p>
+        <p>{{ ErrorMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <a class="modal-action modal-close waves-effect waves-green btn-flat">CLOSE</a>
       </div>
     </div>
   </div>
@@ -87,20 +132,67 @@
         InputImage: '',
         InputBranch: '',
         InputSubdomain: '',
+        LoadingMessage: '',
+        ErrorCode: '',
+        ErrorMessage: '',
       }
     },
     beforeMount() {
-      fetch('/list').then((response) => {
-          response.json().then((json) => {
-            this.Containers = json[0].data
-          })
-        })
+      this.getList()
     },
     filters: {
       omitContainerId: (id) => {
         return id.substr(0, 12)
       }
-    }
+    },
+    methods: {
+      getList() {
+        this.request('GET', '/list', null, (res) => {
+          this.Containers = res[0].data
+        })
+      },
+      postDestroy(subdomain) {
+        this.LoadingMessage = 'Container is terminating...'
+        $('#loading').modal('open')
+        let func = this.request('POST', '/destroy', {'subdomain': subdomain}, (res) => {
+          $('#loading').modal('close')
+        })
+        setTimeout(func, 2000)
+      },
+      postLaunch() {
+        this.LoadingMessage = 'Container is launching...'
+        $('#loading').modal('open')
+
+        setTimeout(() => {
+          $('#loading').modal('close')
+          $('ul.tabs').tabs('select_tab', 'tab1');
+        }, 2000)
+      },
+      request(method, path, req, callable) {
+        fetch(path, {
+          header: {
+            'Content-Type': 'application/json'
+          },
+          method: method,
+          body: method === 'GET' ? null : JSON.stringify(req)
+        }).then((res) => {
+          if (!res.ok) {
+            res.json().then((res) => {
+              data = res[0]
+              this.ErrorCode = data.code
+              this.ErrorMessage = data.message_debug
+              $('#loading').modal('close')
+              $('#error-modal').modal('open')
+              console.error(data)
+            })
+            return
+          }
+          res.json().then((res) => {
+            callable(res)
+          })
+        })
+      }
+    },
   })
 
   var vm = new Vue({
