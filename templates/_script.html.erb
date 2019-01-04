@@ -35,7 +35,7 @@
                 </div>
                 <div class="modal-footer">
                   <a class="modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
-                  <a @click="postDestroy" class="modal-action modal-close waves-effect waves-green btn">DELETE</a>
+                  <a @click="postDestroy(c.subdomain)" class="modal-action modal-close waves-effect waves-green btn">DELETE</a>
                 </div>
               </div>
             </td>
@@ -111,9 +111,9 @@
     </div>
     <div id="error-modal" class="modal">
       <div class="modal-content left-align">
-        <b>エラーが発生しました(´；ω；｀)</b>
-        <p>ステータス: {{ ErrorCode }}</p>
-        <p>メッセージ:</p>
+        <b>Error has occurred (´；ω；｀)</b>
+        <p>Status Code: {{ ErrorCode }}</p>
+        <p>Message:</p>
         <p>{{ ErrorMessage }}</p>
       </div>
       <div class="modal-footer">
@@ -152,10 +152,12 @@
         })
       },
       postDestroy(subdomain) {
+        console.log(subdomain)
         this.LoadingMessage = 'Container is terminating...'
         $('#loading').modal('open')
         let func = this.request('POST', '/destroy', {'subdomain': subdomain}, (res) => {
           $('#loading').modal('close')
+          this.getList()
         })
         setTimeout(func, 2000)
       },
