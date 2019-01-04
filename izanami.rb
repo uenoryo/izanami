@@ -61,6 +61,14 @@ class Izanami
     Response.success_destroy(record)
   end
 
+  def list()
+    records = []
+    maybe "error fetch all" do
+      records = fetch_all
+    end
+    Response.success_list(records)
+  end
+
   # TODO: https への対応
   def proxy_host(subdomain)
     record = find_by_subdomain(subdomain)
@@ -69,7 +77,7 @@ class Izanami
     "#{URL_SCHEME_HTTP}#{LOCAL_LOOPBACK_ADDRESS}:#{record[:container_port]}"
   end
 
-  def home_view()
+  def view_home()
     base = ERB.new(File.read('./templates/home.html.erb'))
     script = ERB.new(File.read('./templates/_script.html.erb')).result
     Response.view(base.result(binding))

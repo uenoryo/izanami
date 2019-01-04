@@ -1,3 +1,5 @@
+require 'json'
+
 # Response (｀・ω・)▄︻┻┳═一
 class Response
   def self.view(erb)
@@ -6,6 +8,14 @@ class Response
       { 'Content-Type' => 'text/html; charset=utf8' },
       erb
     ]
+  end
+
+  def self.success_list(data)
+    success(
+      'コンテナリストの取得に成功しました',
+      'list success',
+      data
+    )
   end
 
   def self.success_launch(data)
@@ -34,7 +44,7 @@ class Response
         message: message,
         message_debug: message_debug,
         data: data
-      ]
+      ].to_json
     ]
   end
 
@@ -48,7 +58,7 @@ class Response
         message: 'サーバーエラーが発生しました',
         message_debug: message,
         data: []
-      ]
+      ].to_json
     ]
   end
 
@@ -62,7 +72,7 @@ class Response
         message: message,
         message_debug: message,
         data: []
-      ]
+      ].to_json
     ]
   end
 
@@ -76,7 +86,7 @@ class Response
         message: 'ページが見つかりません',
         message_debug: 'not found',
         data: []
-      ]
+      ].to_json
     ]
   end
 end

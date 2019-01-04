@@ -29,10 +29,7 @@ class IzanamiServer
   end
 
   def respond_to_proxy_request
-    proxy_host = nil
-    maybe "error find proxy host #{@request.subdomain}" do
-      proxy_host = Izanami.new.proxy_host(@request.subdomain)
-    end
+    proxy_host = Izanami.new.proxy_host(@request.subdomain)
     return Response.not_found if proxy_host.nil?
 
     app = Rack::ReverseProxy.new { reverse_proxy '/', proxy_host }
@@ -43,9 +40,9 @@ class IzanamiServer
     if @request.get?
       case @request.path
       when '/'
-        return Izanami.new.home_view()
+        return Izanami.new.view_home
       when '/list'
-        return [200, { 'Content-Type' => 'application/json' }, [{ x: 2 }.to_json]]
+        return Izanami.new.list
       end
     end
 
@@ -56,17 +53,13 @@ class IzanamiServer
         return Response.bad_request(err) unless err.nil?
 
         input = @request.input
-        maybe "izanami launch failed, input: #{input}" do
-          return Izanami.new.launch(subdomain: input['subdomain'], image: input['image'], branch: input['branch'])
-        end
+        return Izanami.new.launch(subdomain: input['subdomain'], image: input['image'], branch: input['branch'])
       when '/destroy'
         err = @request.validate_for_destroy
         return Response.bad_request(err) unless err.nil?
 
         input = @request.input
-        maybe "izanami destroy failed, input: #{input}" do
-          return Izanami.new.destroy(subdomain: input['subdomain'])
-        end
+        return Izanami.new.destroy(subdomain: input['subdomain'])
       end
     end
 
