@@ -7,13 +7,13 @@
       </ul>
     </div class="lime">
     <div id="tab1" class="col s12">
-      <table>
+      <table class="striped">
         <thead>
           <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Image</th>
-              <th>Updated At</th>
+            <th>ID</th>
+            <th>Sub Domain</th>
+            <th>Docker Image</th>
+            <th>Updated At</th>
           </tr>
         </thead>
         <tbody>
@@ -26,7 +26,40 @@
         </tbody>
       </table>
     </div>
-    <div id="tab2" class="col s6">Test 2</div>
+    <div id="tab2" class="col s12">
+      <div class="create-form container">
+        <div class="col s12 m12">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title"><b>Create Docker Container</b></span>
+              <form class="">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input placeholder="Input sub domain name." id="subdomain" type="text" class="validate">
+                    <label for="subdomain">Sub Domai</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input placeholder="Input docker image name." id="image" type="text" class="validate">
+                    <label for="image">Docker Image</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input placeholder="Input git branch name" id="branch" type="text" class="validate">
+                    <label for="branch">Git Branch</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="card-action right-align">
+              <button class="btn lime accent-2 brown-text">Create</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,11 +68,13 @@
     template: '#app-main',
     data () {
       return {
-        Containers: [1,2],
+        Containers: [],
+        InputImage: '',
+        InputBranch: '',
+        InputSubdomain: '',
       }
     },
     beforeMount() {
-      console.log(this.Containers)
       fetch('/list').then((response) => {
           response.json().then((json) => {
             this.Containers = json[0].data
