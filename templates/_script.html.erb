@@ -1,0 +1,17 @@
+<script type="text/x-template" id="app-main">
+  <div>izanami</div>
+</script>
+
+<script>
+  var c = Vue.component('main', {
+    template: '#app-main'
+  })
+
+  var vm = new Vue({
+    el: '#app',
+
+    components: {
+      'app-main': c
+    },
+  });
+</script>

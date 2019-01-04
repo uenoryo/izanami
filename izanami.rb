@@ -70,8 +70,8 @@ class Izanami
   end
 
   def home_view()
-    str = 'おにぎり'
-    erb = ERB.new(File.read('./templates/home.html.erb'))
-    Response.view(erb.result(binding))
+    base = ERB.new(File.read('./templates/home.html.erb'))
+    script = ERB.new(File.read('./templates/_script.html.erb')).result
+    Response.view(base.result(binding))
   end
 end
