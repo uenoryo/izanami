@@ -12,16 +12,31 @@
           <tr>
             <th>ID</th>
             <th>Sub Domain</th>
+            <th>Branch</th>
             <th>Docker Image</th>
             <th>Updated At</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="c of Containers">
             <td>{{ c.id | omitContainerId }}</td>
             <td>{{ c.subdomain }}</td>
+            <td>{{ c.branch }}</td>
             <td>{{ c.image }}</td>
             <td>{{ c.updated_at }}</td>
+            <td>
+              <a class="waves-effect btn modal-trigger" :href='["#del-" + c.subdomain]'><i class="material-icons">delete</i></a>
+              <div :id='["del-" + c.subdomain]' class="modal">
+                <div class="modal-content">
+                  <p>Are you sure you want to delete? (subdomain: <b>{{ c.subdomain }}</b>)</p>
+                </div>
+                <div class="modal-footer">
+                  <a class="modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+                  <a class="modal-action modal-close waves-effect waves-green btn">DELETE</a>
+                </div>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -36,7 +51,7 @@
                 <div class="row">
                   <div class="input-field col s12">
                     <input placeholder="Input sub domain name." id="subdomain" type="text" class="validate">
-                    <label for="subdomain">Sub Domai</label>
+                    <label for="subdomain">Sub Domain</label>
                   </div>
                 </div>
                 <div class="row">
@@ -54,7 +69,7 @@
               </form>
             </div>
             <div class="card-action right-align">
-              <button class="btn lime accent-2 brown-text">Create</button>
+              <button class="btn waves-effect lime accent-2 brown-text" href="">Create</button>
             </div>
           </div>
         </div>
