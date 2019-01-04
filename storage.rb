@@ -79,7 +79,7 @@ module Storage
     return list unless File.exist?(FILENAME)
 
     maybe "failed load file #{FILENAME}" do
-      list = YAML.load_file(FILENAME)
+      list = YAML.load_file(FILENAME) || []
     end
 
     @list = list
