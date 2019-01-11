@@ -18,9 +18,6 @@ class Request
   end
 
   def initialize(data)
-    # data.each do |d|
-    #   p d
-    # end
     @data = data
   end
 
