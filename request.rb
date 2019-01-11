@@ -38,7 +38,7 @@ class Request
     json = @data['rack.input']&.read
     return if json.nil? || json.empty?
 
-    @input = JSON.parse json
+    @input = JSON.parse json rescue []
   end
 
   def validate_for_launch
