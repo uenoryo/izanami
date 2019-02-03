@@ -81,4 +81,7 @@ curl -H 'Content-Type:application/json' -d '{"subdomain":"test"}' http://izanami
 
 ## 管理画面
 
-実装中です :construction:
+管理画面で「サブドメイン」「イメージ」「ブランチ」を指定して  
+環境を立てることも可能です
+
+![image](https://user-images.githubusercontent.com/15713787/52175703-27cc2980-27eb-11e9-9e7c-44a5078e521e.png)
