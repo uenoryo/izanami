@@ -26,6 +26,14 @@ class Response
     )
   end
 
+  def self.success_restart(data)
+    success(
+      'コンテナの再起動に成功しました',
+      'restart success',
+      data
+    )
+  end
+
   def self.success_destroy(data)
     success(
       'コンテナの削除に成功しました',
