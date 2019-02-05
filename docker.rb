@@ -23,6 +23,10 @@ module Docker
     ).start
   end
 
+  def restart_container(id)
+    Docker::Container.get(id).restart()
+  end
+
   def destroy_container(id)
     Docker::Container.get(id).remove(force: true)
   end
