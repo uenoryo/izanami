@@ -29,6 +29,20 @@
             <td>{{ c.image }}</td>
             <td>{{ c.updated_at }}</td>
             <td>
+              <a class="waves-effect btn modal-trigger" :href='["#restart-" + c.subdomain]'>
+                <i class="material-icons">rotate_right</i>
+              </a>
+              <div :id='["restart-" + c.subdomain]' class="modal">
+                <div class="modal-content">
+                  <p>Are you sure you want to restart? (subdomain: <b>{{ c.subdomain }}</b>)</p>
+                </div>
+                <div class="modal-footer">
+                  <a class="modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
+                  <a @click="postRestart(c.subdomain)" class="modal-action modal-close waves-effect waves-green btn">RESTART</a>
+                </div>
+              </div>
+            </td>
+            <td>
               <a class="waves-effect btn modal-trigger" :href='["#del-" + c.subdomain]'>
                 <i class="material-icons">delete</i>
               </a>
@@ -38,7 +52,7 @@
                 </div>
                 <div class="modal-footer">
                   <a class="modal-action modal-close waves-effect waves-green btn-flat">CANCEL</a>
-                  <a @click="postDestroy(c.subdomain)" class="modal-action modal-close waves-effect waves-green btn">DELETE</a>
+                  <a @click="postDestroy(c.subdomain)" class="modal-action modal-close waves-effect btn red">DELETE</a>
                 </div>
               </div>
             </td>
@@ -74,7 +88,7 @@
               </form>
             </div>
             <div class="card-action right-align">
-              <button @click="postLaunch" class="btn waves-effect lime accent-2 brown-text">Create</button>
+              <button @click="postLaunch" class="btn waves-effect waves-green">Create</button>
             </div>
           </div>
         </div>
@@ -154,6 +168,15 @@
           this.Containers = res[0].data
         })
       },
+      postRestart(subdomain) {
+        this.LoadingMessage = 'Container is restarting...'
+        $('#loading').modal('open')
+        let func = this.request('POST', '/restart', {'subdomain': subdomain}, (res) => {
+          $('#loading').modal('close')
+          this.getList()
+        })
+        setTimeout(func, 2500)
+      },
       postDestroy(subdomain) {
         this.LoadingMessage = 'Container is terminating...'
         $('#loading').modal('open')
@@ -161,7 +184,7 @@
           $('#loading').modal('close')
           this.getList()
         })
-        setTimeout(func, 2000)
+        setTimeout(func, 2500)
       },
       postLaunch() {
         this.LoadingMessage = 'Container is launching...'
@@ -179,7 +202,7 @@
           this.InputBranch = ''
           this.InputImage = ''
         })
-        setTimeout(func, 2000)
+        setTimeout(func, 200)
       },
       request(method, path, req, callable) {
         fetch(path, {
