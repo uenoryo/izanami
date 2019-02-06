@@ -175,7 +175,7 @@
           $('#loading').modal('close')
           this.getList()
         })
-        setTimeout(func, 2500)
+        setTimeout(func, 200)
       },
       postDestroy(subdomain) {
         this.LoadingMessage = 'Container is terminating...'
@@ -184,7 +184,7 @@
           $('#loading').modal('close')
           this.getList()
         })
-        setTimeout(func, 2500)
+        setTimeout(func, 200)
       },
       postLaunch() {
         this.LoadingMessage = 'Container is launching...'
