@@ -61,6 +61,10 @@ class Izanami
       restart_container(record[:id])
     end
 
+    maybe "error update record #{record}" do
+      update(record)
+    end
+
     Response.success_restart(record)
   end
 
