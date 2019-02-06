@@ -54,6 +54,12 @@ class IzanamiServer
 
         input = @request.input
         return Izanami.new.launch(subdomain: input['subdomain'], image: input['image'], branch: input['branch'])
+      when '/restart'
+        err = @request.validate_for_restart
+        return Response.bad_request(err) unless err.nil?
+
+        input = @request.input
+        return Izanami.new.restart(subdomain: input['subdomain'])
       when '/destroy'
         err = @request.validate_for_destroy
         return Response.bad_request(err) unless err.nil?

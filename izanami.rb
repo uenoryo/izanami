@@ -51,6 +51,23 @@ class Izanami
     Response.success_launch(info)
   end
 
+  def restart(subdomain:)
+    record = nil
+    maybe 'error find record' do
+      record = find_must_by_subdomain(subdomain)
+    end
+
+    maybe "error restart container id #{record[:id]}" do
+      restart_container(record[:id])
+    end
+
+    maybe "error update record #{record}" do
+      update(record)
+    end
+
+    Response.success_restart(record)
+  end
+
   def destroy(subdomain:)
     record = nil
     maybe 'error find record' do

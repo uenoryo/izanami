@@ -55,6 +55,12 @@ class Request
     end
   end
 
+  def validate_for_restart
+    if @input['subdomain'].nil? || @input['subdomain'].empty?
+      'subdomain is required for restart'
+    end
+  end
+
   def validate_for_destroy
     if @input['subdomain'].nil? || @input['subdomain'].empty?
       'subdomain is required for destroy'

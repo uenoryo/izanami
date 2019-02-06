@@ -46,12 +46,43 @@ module Storage
     file.close
   end
 
-  def delete(record)
-    raise 'container id is empty' if record[:subdomain] == ''
+  def update(record)
+    raise 'subdomain is empty' if record[:subdomain] == ''
 
     all_records = []
     maybe 'error get all record' do
-      all = fetch_all
+      all = fetch_all()
+      all_records = all if all
+    end
+
+    file = nil
+    maybe "error file open #{FILENAME}" do
+      file = File.open(FILENAME, 'w')
+    end
+
+    all_records.map! do |r|
+      if r[:subdomain] == record[:subdomain]
+        now = DateTime.now.strftime('%Y-%m-%d %H:%M:%S')
+        r[:updated_at] = now
+      end
+      r
+    end
+
+    maybe 'error dump yaml' do
+      all_records = uniq_by_subdomain(all_records)
+      YAML.dump(all_records, file)
+      reset_cache
+    end
+
+    file.close
+  end
+
+  def delete(record)
+    raise 'subdomain is empty' if record[:subdomain] == ''
+
+    all_records = []
+    maybe 'error get all record' do
+      all = fetch_all()
       all_records = all if all
     end
 
