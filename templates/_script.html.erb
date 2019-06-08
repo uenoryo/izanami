@@ -166,6 +166,11 @@
       getList() {
         this.request('GET', '/list', null, (res) => {
           this.Containers = res[0].data
+
+          // 要素が描画された後にModalを再度認識させる
+          setTimeout(() => {
+            $('.modal').modal();
+          }, 200)
         })
       },
       postRestart(subdomain) {
