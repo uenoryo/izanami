@@ -8,7 +8,7 @@ GEM
     eventmachine (1.2.7)
     excon (0.62.0)
     multi_json (1.13.1)
-    rack (2.0.6)
+    rack (2.1.4)
     rack-proxy (0.6.5)
       rack
     rack-reverse-proxy (0.12.0)
